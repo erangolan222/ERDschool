@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ליווי אישי במסחר באופציות | Strike Academy</title>
+<meta name="description" content="תוכנית ליווי אישית וצמודה למסחר באופציות. תוכנית מסחר מותאמת אישית, ניהול סיכונים וליווי שוטף.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0d12;
+    --bg-alt: #0f141b;
+    --card: #141a23;
+    --card-border: #232b37;
+    --text: #eef1f5;
+    --text-dim: #9aa5b3;
+    --text-faint: #6b7684;
+    --gold: #e8b64c;
+    --gold-bright: #f5cd6e;
+    --green: #1fbf85;
+    --red: #e4574c;
+    --shadow: 0 20px 50px rgba(0,0,0,.45);
+    --radius: 16px;
+    --container: 1160px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Heebo', Arial, sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  .wrap{max-width:var(--container); margin:0 auto; padding:0 24px;}
+  section{position:relative;}
+
+  /* Background texture */
+  .glow{
+    position:absolute; border-radius:50%; filter:blur(120px); pointer-events:none; z-index:0;
+  }
+  .glow-gold{ background:rgba(232,182,76,.18); width:520px; height:520px; }
+  .glow-green{ background:rgba(31,191,133,.14); width:480px; height:480px; }
+
+  /* Buttons */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:16px 34px;
+    border-radius:12px;
+    font-weight:800;
+    font-size:1.05rem;
+    border:none;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+    white-space:nowrap;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg, var(--gold-bright), var(--gold));
+    color:#191207;
+    box-shadow:0 10px 30px rgba(232,182,76,.25);
+  }
+  .btn-primary:hover{ transform:translateY(-2px); filter:brightness(1.05); box-shadow:0 14px 36px rgba(232,182,76,.35); }
+  .btn-outline{
+    background:transparent;
+    color:var(--text);
+    border:1.5px solid var(--card-border);
+  }
+  .btn-outline:hover{ border-color:var(--gold); color:var(--gold-bright); }
+  .btn-block{ width:100%; }
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:.85rem; font-weight:700; letter-spacing:.03em;
+    color:var(--gold-bright);
+    background:rgba(232,182,76,.1);
+    border:1px solid rgba(232,182,76,.25);
+    padding:7px 16px; border-radius:999px;
+    margin-bottom:18px;
+  }
+  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--green); }
+
+  h1,h2,h3{ font-weight:800; letter-spacing:-.01em; }
+  .section-title{
+    font-size:clamp(1.8rem, 4vw, 2.6rem);
+    margin-bottom:14px;
+  }
+  .section-sub{
+    color:var(--text-dim);
+    font-size:1.08rem;
+    max-width:640px;
+  }
+  .center{ text-align:center; margin-inline:auto; }
+
+  /* ===== Header ===== */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(10,13,18,.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--card-border);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 24px;
+  }
+  .logo{
+    font-size:1.3rem; font-weight:900; display:flex; align-items:center; gap:8px;
+  }
+  .logo span{ color:var(--gold-bright); }
+  .nav-links{ display:flex; gap:32px; align-items:center; }
+  .nav-links a{ color:var(--text-dim); font-weight:500; font-size:.95rem; transition:color .15s; }
+  .nav-links a:hover{ color:var(--text); }
+  .nav-cta{ display:flex; align-items:center; gap:16px; }
+  .burger{ display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; }
+  .burger span{ width:24px; height:2px; background:var(--text); display:block; }
+
+  /* ===== Hero ===== */
+  .hero{
+    padding:88px 0 70px;
+    overflow:hidden;
+  }
+  .glow-gold.g1{ top:-120px; right:-80px; }
+  .glow-green.g2{ bottom:-160px; left:-100px; }
+  .hero-inner{
+    position:relative; z-index:1;
+    display:grid; grid-template-columns:1.1fr .9fr; gap:56px; align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(2.2rem, 5vw, 3.4rem);
+    line-height:1.18;
+    margin-bottom:20px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    background:linear-gradient(135deg, var(--gold-bright), var(--gold));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p.lead{
+    font-size:1.15rem; color:var(--text-dim); margin-bottom:32px; max-width:520px;
+  }
+  .hero-ctas{ display:flex; gap:16px; flex-wrap:wrap; margin-bottom:28px; }
+  .hero-trust{ display:flex; gap:22px; flex-wrap:wrap; color:var(--text-faint); font-size:.88rem; }
+  .hero-trust li{ display:flex; align-items:center; gap:8px; }
+  .check-ic{ color:var(--green); font-weight:900; }
+
+  .hero-card{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:var(--radius);
+    padding:28px;
+    box-shadow:var(--shadow);
+    position:relative; z-index:1;
+  }
+  .hero-card-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
+  .hero-card-head .badge{ background:rgba(31,191,133,.12); color:var(--green); font-size:.78rem; font-weight:700; padding:5px 12px; border-radius:999px; }
+  .mock-row{ display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px dashed var(--card-border); font-size:.92rem; }
+  .mock-row:last-child{ border-bottom:none; }
+  .mock-row .up{ color:var(--green); font-weight:700; }
+  .mock-row .down{ color:var(--red); font-weight:700; }
+  .mock-chart{ height:90px; margin:18px 0; border-radius:10px; background:
+    linear-gradient(180deg, rgba(31,191,133,.12), transparent);
+    position:relative; overflow:hidden;
+  }
+  .mock-chart svg{ width:100%; height:100%; }
+
+  /* ===== Stats ===== */
+  .stats{ padding:36px 0; border-top:1px solid var(--card-border); border-bottom:1px solid var(--card-border); background:var(--bg-alt); }
+  .stats-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:24px; text-align:center; }
+  .stat b{ display:block; font-size:clamp(1.6rem,3vw,2.2rem); color:var(--gold-bright); font-weight:900; }
+  .stat span{ color:var(--text-faint); font-size:.88rem; }
+
+  /* ===== Problem ===== */
+  .problem{ padding:96px 0; }
+  .problem-grid{ display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; }
+  .problem-list li{
+    display:flex; align-items:flex-start; gap:14px;
+    padding:16px 0; border-bottom:1px solid var(--card-border);
+    color:var(--text-dim); font-size:1.03rem;
+  }
+  .problem-list li:last-child{ border-bottom:none; }
+  .x-ic{ flex:0 0 auto; width:26px; height:26px; border-radius:50%; background:rgba(228,87,76,.12); color:var(--red); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:.85rem; }
+
+  /* ===== Program / What you get ===== */
+  .program{ padding:96px 0; background:var(--bg-alt); border-top:1px solid var(--card-border); border-bottom:1px solid var(--card-border); }
+  .cards-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:48px; }
+  .card{
+    background:var(--card); border:1px solid var(--card-border); border-radius:var(--radius);
+    padding:28px; transition:transform .18s ease, border-color .18s ease;
+  }
+  .card:hover{ transform:translateY(-4px); border-color:rgba(232,182,76,.35); }
+  .card .ic{
+    width:48px; height:48px; border-radius:12px;
+    background:rgba(232,182,76,.12); color:var(--gold-bright);
+    display:flex; align-items:center; justify-content:center; margin-bottom:18px; font-size:1.4rem;
+  }
+  .card h3{ font-size:1.15rem; margin-bottom:10px; }
+  .card p{ color:var(--text-dim); font-size:.96rem; }
+
+  /* ===== Process ===== */
+  .process{ padding:96px 0; }
+  .steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-top:48px; counter-reset:step; }
+  .step{ position:relative; padding-top:8px; }
+  .step .num{
+    font-size:2.6rem; font-weight:900; color:transparent;
+    -webkit-text-stroke:1.5px var(--card-border);
+    margin-bottom:10px; display:block;
+  }
+  .step h3{ font-size:1.08rem; margin-bottom:8px; }
+  .step p{ color:var(--text-dim); font-size:.92rem; }
+
+  /* ===== Coach ===== */
+  .coach{ padding:96px 0; background:var(--bg-alt); border-top:1px solid var(--card-border); border-bottom:1px solid var(--card-border); }
+  .coach-grid{ display:grid; grid-template-columns:.8fr 1.2fr; gap:56px; align-items:center; }
+  .avatar-placeholder{
+    width:100%; aspect-ratio:1/1; max-width:320px; border-radius:24px;
+    background:linear-gradient(145deg, #1a212c, #10151d);
+    border:1.5px dashed var(--card-border);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+    color:var(--text-faint);
+  }
+  .avatar-placeholder .circle{
+    width:96px; height:96px; border-radius:50%;
+    background:linear-gradient(135deg, var(--gold), var(--green));
+    display:flex; align-items:center; justify-content:center;
+    font-size:2rem; font-weight:900; color:#12161c;
+  }
+  .avatar-placeholder small{ font-size:.78rem; text-align:center; padding:0 20px; }
+  .coach-badges{ display:flex; gap:12px; margin-top:20px; flex-wrap:wrap; }
+  .coach-badges span{ background:var(--card); border:1px solid var(--card-border); padding:8px 14px; border-radius:10px; font-size:.85rem; color:var(--text-dim); }
+  .coach h2{ margin-bottom:6px; }
+  .coach .role{ color:var(--gold-bright); font-weight:700; margin-bottom:18px; display:block; }
+  .coach p{ color:var(--text-dim); margin-bottom:14px; }
+
+  /* ===== Testimonials ===== */
+  .testimonials{ padding:96px 0; }
+  .t-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:48px; }
+  .t-card{ background:var(--card); border:1px solid var(--card-border); border-radius:var(--radius); padding:26px; }
+  .t-stars{ color:var(--gold-bright); margin-bottom:14px; letter-spacing:2px; }
+  .t-card p{ color:var(--text-dim); font-size:.96rem; margin-bottom:20px; }
+  .t-person{ display:flex; align-items:center; gap:12px; }
+  .t-avatar{
+    width:44px; height:44px; border-radius:50%;
+    background:rgba(232,182,76,.14); color:var(--gold-bright);
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.9rem;
+    flex:0 0 auto;
+  }
+  .t-person b{ display:block; font-size:.92rem; }
+  .t-person span{ color:var(--text-faint); font-size:.8rem; }
+
+  /* ===== Guarantee ===== */
+  .guarantee{ padding:80px 0; }
+  .guarantee-box{
+    background:linear-gradient(135deg, rgba(232,182,76,.08), rgba(31,191,133,.06));
+    border:1px solid rgba(232,182,76,.25);
+    border-radius:20px;
+    padding:48px;
+    display:grid; grid-template-columns:auto 1fr; gap:28px; align-items:center;
+  }
+  .guarantee-icon{
+    width:76px; height:76px; border-radius:50%;
+    background:rgba(232,182,76,.15); color:var(--gold-bright);
+    display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:900;
+  }
+  .guarantee-box h3{ font-size:1.3rem; margin-bottom:8px; }
+  .guarantee-box p{ color:var(--text-dim); }
+
+  /* ===== FAQ ===== */
+  .faq{ padding:96px 0; background:var(--bg-alt); border-top:1px solid var(--card-border); border-bottom:1px solid var(--card-border); }
+  .faq-list{ max-width:760px; margin:48px auto 0; }
+  .faq-item{ border-bottom:1px solid var(--card-border); }
+  .faq-q{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:22px 4px; cursor:pointer; font-weight:700; font-size:1.02rem;
+  }
+  .faq-q .arrow{ transition:transform .2s ease; color:var(--gold-bright); font-size:1.2rem; flex:0 0 auto; margin-inline-start:16px; }
+  .faq-item.open .arrow{ transform:rotate(45deg); }
+  .faq-a{ max-height:0; overflow:hidden; transition:max-height .25s ease; color:var(--text-dim); font-size:.96rem; }
+  .faq-a-inner{ padding:0 4px 22px; }
+  .faq-item.open .faq-a{ max-height:400px; }
+
+  /* ===== CTA + Form ===== */
+  .cta{ padding:96px 0; }
+  .cta-grid{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start; }
+  .cta-left h2{ margin-bottom:16px; }
+  .cta-left p{ color:var(--text-dim); margin-bottom:24px; }
+  .cta-points li{ display:flex; align-items:center; gap:10px; color:var(--text-dim); padding:8px 0; font-size:.98rem; }
+  .form-card{
+    background:var(--card); border:1px solid var(--card-border); border-radius:var(--radius);
+    padding:32px; box-shadow:var(--shadow);
+  }
+  .form-card h3{ margin-bottom:6px; }
+  .form-card .form-sub{ color:var(--text-faint); font-size:.88rem; margin-bottom:24px; }
+  .field{ margin-bottom:16px; }
+  .field label{ display:block; font-size:.86rem; color:var(--text-dim); margin-bottom:7px; font-weight:600; }
+  .field input, .field textarea{
+    width:100%; background:var(--bg); border:1px solid var(--card-border); border-radius:10px;
+    padding:13px 14px; color:var(--text); font-family:inherit; font-size:.95rem;
+  }
+  .field input:focus, .field textarea:focus{ outline:none; border-color:var(--gold); }
+  .field textarea{ resize:vertical; min-height:90px; }
+  .form-note{ font-size:.78rem; color:var(--text-faint); margin-top:14px; text-align:center; }
+  .form-success{ display:none; text-align:center; padding:20px 0; }
+  .form-success.show{ display:block; }
+  .form-success .ic{ font-size:2.4rem; color:var(--green); margin-bottom:10px; }
+
+  /* ===== Footer ===== */
+  footer{ padding:56px 0 30px; }
+  .footer-grid{ display:flex; justify-content:space-between; gap:32px; flex-wrap:wrap; padding-bottom:32px; border-bottom:1px solid var(--card-border); }
+  .footer-brand p{ color:var(--text-faint); font-size:.88rem; max-width:320px; margin-top:10px; }
+  .footer-cols{ display:flex; gap:56px; flex-wrap:wrap; }
+  .footer-col h4{ font-size:.85rem; color:var(--text-dim); margin-bottom:14px; }
+  .footer-col a, .footer-col span{ display:block; color:var(--text-faint); font-size:.88rem; margin-bottom:10px; }
+  .footer-col a:hover{ color:var(--gold-bright); }
+  .disclaimer{ color:var(--text-faint); font-size:.76rem; line-height:1.7; padding-top:24px; max-width:900px; }
+  .copyright{ color:var(--text-faint); font-size:.78rem; margin-top:20px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+
+  @media (max-width:900px){
+    .nav-links{ display:none; }
+    .burger{ display:flex; }
+    .hero-inner, .problem-grid, .coach-grid, .cta-grid{ grid-template-columns:1fr; }
+    .stats-grid{ grid-template-columns:repeat(2,1fr); }
+    .cards-grid, .t-grid{ grid-template-columns:1fr; }
+    .steps{ grid-template-columns:repeat(2,1fr); }
+    .guarantee-box{ grid-template-columns:1fr; text-align:center; justify-items:center; }
+  }
+  @media (max-width:520px){
+    .stats-grid{ grid-template-columns:repeat(2,1fr); }
+    .steps{ grid-template-columns:1fr; }
+    .hero-ctas .btn{ width:100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header>
+  <nav class="nav wrap">
+    <div class="logo">STRIKE <span>ACADEMY</span></div>
+    <div class="nav-links">
+      <a href="#program">התוכנית</a>
+      <a href="#process">איך זה עובד</a>
+      <a href="#coach">עליי</a>
+      <a href="#testimonials">המלצות</a>
+      <a href="#faq">שאלות נפוצות</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#contact" class="btn btn-primary">קביעת שיחת היכרות</a>
+      <button class="burger" aria-label="תפריט" onclick="document.querySelector('.nav-links').classList.toggle('mobile-open')">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="glow glow-gold g1"></div>
+  <div class="glow glow-green g2"></div>
+  <div class="wrap hero-inner">
+    <div>
+      <div class="eyebrow"><span class="dot"></span> ליווי אישי 1:1 למסחר באופציות</div>
+      <h1>תפסיק לנחש בשוק. <em>תתחיל לסחור</em> עם תוכנית, שיטה וליווי צמוד</h1>
+      <p class="lead">
+        ליווי אישי וממוקד למסחר באופציות – בונים יחד תוכנית מסחר מותאמת אישית, לומדים ניהול סיכונים נכון,
+        ומלווים אותך צעד-אחר-צעד עד שאתה סוחר בביטחון ובעצמאות.
+      </p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary">אני רוצה ליווי אישי</a>
+        <a href="#program" class="btn btn-outline">מה כולל התהליך?</a>
+      </div>
+      <ul class="hero-trust">
+        <li><span class="check-ic">✓</span> שיחת היכרות ללא עלות</li>
+        <li><span class="check-ic">✓</span> תוכנית מסחר אישית</li>
+        <li><span class="check-ic">✓</span> ליווי צמוד ומענה שוטף</li>
+      </ul>
+    </div>
+
+    <div class="hero-card">
+      <div class="hero-card-head">
+        <div>
+          <div style="font-size:.85rem; color:var(--text-faint);">תיק לדוגמה — מעקב שבועי</div>
+          <div style="font-weight:800; font-size:1.15rem;">[שם התוכנית / קורס]</div>
+        </div>
+        <div class="badge">פעיל</div>
+      </div>
+      <div class="mock-chart">
+        <svg viewBox="0 0 300 90" preserveAspectRatio="none">
+          <polyline points="0,70 30,60 60,65 90,45 120,50 150,30 180,38 210,20 240,26 270,10 300,15"
+            fill="none" stroke="#1fbf85" stroke-width="2.5"/>
+        </svg>
+      </div>
+      <div class="mock-row"><span>Call Option — [נכס בסיס]</span><span class="up">+ [X]%</span></div>
+      <div class="mock-row"><span>Put Option — [נכס בסיס]</span><span class="down">− [X]%</span></div>
+      <div class="mock-row"><span>ניהול סיכון לעסקה</span><span>[X]% מהתיק</span></div>
+      <div class="mock-row"><span>סטטוס תוכנית מסחר</span><span class="up">בנויה ומעודכנת</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATS ================= -->
+<section class="stats">
+  <div class="wrap stats-grid">
+    <div class="stat"><b>+[XX]</b><span>מלווים אישית</span></div>
+    <div class="stat"><b>[X] שנות</b><span>ניסיון בשוק ההון</span></div>
+    <div class="stat"><b>[XX]%</b><span>שביעות רצון מהתהליך</span></div>
+    <div class="stat"><b>1:1</b><span>ליווי אישי, לא קבוצתי</span></div>
+  </div>
+</section>
+
+<!-- ================= PROBLEM ================= -->
+<section class="problem">
+  <div class="wrap problem-grid">
+    <div>
+      <div class="eyebrow"><span class="dot"></span> לפני שמתחילים</div>
+      <h2 class="section-title">מוכר לך המצב הזה?</h2>
+      <p class="section-sub">
+        רוב הסוחרים לא נכשלים כי השוק "קשה מדי" — הם נכשלים כי אין להם תוכנית סדורה, ניהול סיכונים
+        וליווי שמחזיק אותם ממושמעים לאורך זמן.
+      </p>
+    </div>
+    <ul class="problem-list">
+      <li><span class="x-ic">✕</span> נכנסת לפוזיציות בלי תוכנית ברורה, ולפעמים מתוך רגש</li>
+      <li><span class="x-ic">✕</span> קשה לך להבין אילו אופציות מתאימות למצב השוק</li>
+      <li><span class="x-ic">✕</span> אין לך ניהול סיכונים מסודר, וחששות מ"פיצוץ" התיק</li>
+      <li><span class="x-ic">✕</span> למדת המון תוכן ברשת אבל אין לך מי שילווה אותך על התיק שלך בפועל</li>
+      <li><span class="x-ic">✕</span> קושי לשמור על משמעת ועקביות לאורך זמן</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= PROGRAM ================= -->
+<section class="program" id="program">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> התוכנית</div>
+    <h2 class="section-title">מה כולל הליווי האישי</h2>
+    <p class="section-sub">תהליך מובנה שמותאם אישית לרמת הידע, לסכום ההון ולמטרות שלך בשוק ההון.</p>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="ic">◎</div>
+        <h3>שיחות אישיות 1:1</h3>
+        <p>מפגשים קבועים בהתאמה אישית, בזום או טלפונית, לפי הקצב וה[תדירות] שנקבע יחד.</p>
+      </div>
+      <div class="card">
+        <div class="ic">⌁</div>
+        <h3>תוכנית מסחר אישית</h3>
+        <p>בונים יחד תוכנית מסחר מסודרת: אסטרטגיות אופציות, תנאי כניסה ויציאה ומדדי סיכון.</p>
+      </div>
+      <div class="card">
+        <div class="ic">◆</div>
+        <h3>ניהול סיכונים</h3>
+        <p>לומדים לגודל פוזיציה נכון, גידור (Hedging) והגנה על ההון לאורך זמן.</p>
+      </div>
+      <div class="card">
+        <div class="ic">✎</div>
+        <h3>ניתוח עסקאות בזמן אמת</h3>
+        <p>עוברים יחד על עסקאות שביצעת, מסיקים מסקנות ומשפרים את קבלת ההחלטות.</p>
+      </div>
+      <div class="card">
+        <div class="ic">☍</div>
+        <h3>זמינות ותמיכה שוטפת</h3>
+        <p>ערוץ תקשורת ישיר לשאלות בין המפגשים, כדי שלא תישאר לבד מול מסך.</p>
+      </div>
+      <div class="card">
+        <div class="ic">▤</div>
+        <h3>חומרי לימוד ותיעוד</h3>
+        <p>סיכומים, תבניות ומעקב התקדמות אישי לאורך כל התהליך.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROCESS ================= -->
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> תהליך העבודה</div>
+    <h2 class="section-title">איך זה עובד — 4 שלבים</h2>
+    <p class="section-sub">תהליך פשוט וברור, מהשיחה הראשונה ועד למסחר עצמאי ובטוח.</p>
+
+    <div class="steps">
+      <div class="step">
+        <span class="num">01</span>
+        <h3>שיחת היכרות</h3>
+        <p>מכירים, ממפים את הרקע, המטרות והציפיות שלך מהתהליך.</p>
+      </div>
+      <div class="step">
+        <span class="num">02</span>
+        <h3>בניית תוכנית אישית</h3>
+        <p>מגדירים יחד תוכנית מסחר, ניהול סיכונים ויעדים ריאליים.</p>
+      </div>
+      <div class="step">
+        <span class="num">03</span>
+        <h3>ליווי צמוד</h3>
+        <p>מפגשים קבועים, ליווי על עסקאות בפועל וליטוש התהליך שלך.</p>
+      </div>
+      <div class="step">
+        <span class="num">04</span>
+        <h3>עצמאות במסחר</h3>
+        <p>אתה סוחר בביטחון, לפי שיטה מסודרת, ללא תלות קבועה.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COACH ================= -->
+<section class="coach" id="coach">
+  <div class="wrap coach-grid">
+    <div>
+      <div class="avatar-placeholder">
+        <div class="circle">א.כ</div>
+        <small>[מקום לתמונה אישית — יש להחליף בתמונה אמיתית]</small>
+      </div>
+      <div class="coach-badges">
+        <span>[תעודה / הסמכה]</span>
+        <span>[X] שנות ניסיון</span>
+        <span>[תחום התמחות]</span>
+      </div>
+    </div>
+    <div>
+      <div class="eyebrow"><span class="dot"></span> קצת עליי</div>
+      <h2>[שם מלא של המאמן]</h2>
+      <span class="role">מאמן מסחר באופציות | [תפקיד / תיאור נוסף]</span>
+      <p>
+        [כאן ייכתב סיפור אישי קצר — איך נכנסת לעולם המסחר, אילו אתגרים עברת, ומה גרם לך להחליט
+        ללוות אחרים בדרך שלהם. שתי עד שלוש פסקאות קצרות שיוצרות אמון וחיבור אישי.]
+      </p>
+      <p>
+        [פסקה נוספת: הגישה שלך ללימוד, למה ליווי אישי ולא קורס כללי, ומה מייחד את השיטה שלך.]
+      </p>
+      <a href="#contact" class="btn btn-primary" style="margin-top:10px;">בוא נדבר</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section class="testimonials" id="testimonials">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> תוצאות מהשטח</div>
+    <h2 class="section-title">מה אומרים המלווים שלי</h2>
+    <p class="section-sub">[יש להחליף בהמלצות אמיתיות של תלמידים/לקוחות, בהסכמתם]</p>
+
+    <div class="t-grid">
+      <div class="t-card">
+        <div class="t-stars">★★★★★</div>
+        <p>"[כאן תבוא המלצה אמיתית — מה השתנה אצל הלקוח, מה הוא למד ואיך התהליך עזר לו בפועל.]"</p>
+        <div class="t-person">
+          <div class="t-avatar">א.ל</div>
+          <div><b>[שם פרטי ושם משפחה]</b><span>[עיר / תפקיד]</span></div>
+        </div>
+      </div>
+      <div class="t-card">
+        <div class="t-stars">★★★★★</div>
+        <p>"[המלצה נוספת — דגש על ליווי אישי, זמינות ותחושת ביטחון שקיבל הלקוח בתהליך.]"</p>
+        <div class="t-person">
+          <div class="t-avatar">מ.ש</div>
+          <div><b>[שם פרטי ושם משפחה]</b><span>[עיר / תפקיד]</span></div>
+        </div>
+      </div>
+      <div class="t-card">
+        <div class="t-stars">★★★★★</div>
+        <p>"[המלצה שלישית — אפשר להתמקד בתוצאה מוחשית או בשינוי גישה למסחר.]"</p>
+        <div class="t-person">
+          <div class="t-avatar">ד.כ</div>
+          <div><b>[שם פרטי ושם משפחה]</b><span>[עיר / תפקיד]</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GUARANTEE ================= -->
+<section class="guarantee">
+  <div class="wrap">
+    <div class="guarantee-box">
+      <div class="guarantee-icon">✓</div>
+      <div>
+        <h3>[כותרת ההתחייבות שלך ללקוח, למשל: "מחויבות אישית לתהליך שלך"]</h3>
+        <p>[כאן אפשר לכתוב מדיניות ביטול/החזר, או התחייבות אישית ללקוח — בהתאם למדיניות העסקית שלך. חשוב לוודא התאמה לדרישות הרגולציה הרלוונטיות בתחום הייעוץ הפיננסי.]</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="eyebrow center"><span class="dot"></span> שאלות נפוצות</div>
+    <h2 class="section-title center">יש לך שאלות? הנה כמה תשובות</h2>
+
+    <div class="faq-list">
+      <div class="faq-item open">
+        <div class="faq-q">למי מתאים הליווי האישי? <span class="arrow">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">[ענה כאן — למשל: מתאים גם למתחילים לחלוטין וגם לסוחרים עם ניסיון שרוצים לשכלל שיטה ולעבור לאופציות.]</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">כמה זמן נמשך התהליך? <span class="arrow">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">[ענה כאן — למשל: משך התוכנית נקבע בהתאם למטרות שלך, החל מ-[X] חודשים.]</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">האם צריך ניסיון קודם במסחר? <span class="arrow">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">[ענה כאן — פרט אם נדרש בסיס קודם או שהתוכנית בנויה מאפס.]</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">כמה עולה הליווי? <span class="arrow">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">[ענה כאן, או הפנה לשיחת ההיכרות לקבלת הצעת מחיר מותאמת אישית.]</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">האם זו המלצת השקעה? <span class="arrow">+</span></div>
+        <div class="faq-a"><div class="faq-a-inner">התהליך הינו ליווי לימודי-אישי ואינו מהווה ייעוץ השקעות או המלצה לביצוע עסקאות. מסחר באופציות כרוך בסיכון להפסד הון. [יש להתאים ניסוח זה עם ייעוץ משפטי/רגולטורי מתאים.]</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA + FORM ================= -->
+<section class="cta" id="contact">
+  <div class="wrap cta-grid">
+    <div class="cta-left">
+      <div class="eyebrow"><span class="dot"></span> הצעד הבא</div>
+      <h2 class="section-title">בוא נקבע שיחת היכרות</h2>
+      <p>
+        השאר/י פרטים ונחזור אליך בהקדם לתיאום שיחת היכרות קצרה, ללא עלות וללא התחייבות,
+        כדי להבין מה הכי נכון עבורך.
+      </p>
+      <ul class="cta-points">
+        <li><span class="check-ic">✓</span> שיחה אישית ומותאמת</li>
+        <li><span class="check-ic">✓</span> ללא עלות וללא התחייבות</li>
+        <li><span class="check-ic">✓</span> חזרה תוך [X] ימי עסקים</li>
+      </ul>
+    </div>
+
+    <div class="form-card">
+      <h3>השאירו פרטים</h3>
+      <p class="form-sub">נציג/ה יחזור/תחזור אליכם בהקדם האפשרי</p>
+
+      <form id="leadForm" action="https://formsubmit.co/stikeacademy@gmail.com" method="POST">
+        <!-- FormSubmit configuration: sends submissions straight to the coaching inbox -->
+        <input type="hidden" name="_subject" value="ליד חדש מדף הנחיתה — ליווי אישי באופציות">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+        <div class="field">
+          <label for="name">שם מלא</label>
+          <input type="text" id="name" name="שם מלא" placeholder="ישראל ישראלי" required>
+        </div>
+        <div class="field">
+          <label for="phone">טלפון</label>
+          <input type="tel" id="phone" name="טלפון" placeholder="05X-XXXXXXX" required>
+        </div>
+        <div class="field">
+          <label for="email">אימייל</label>
+          <input type="email" id="email" name="אימייל" placeholder="name@email.com" required>
+        </div>
+        <div class="field">
+          <label for="message">ספר/י לי קצת על עצמך (אופציונלי)</label>
+          <textarea id="message" name="הודעה" placeholder="רמת ניסיון, מה חשוב לך לקבל מהתהליך..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">שלח/י פרטים ואחזור אליך</button>
+        <p class="form-note">הפרטים שלך נשמרים בסודיות ולא יועברו לגורם שלישי.</p>
+      </form>
+
+      <div class="form-success" id="formSuccess">
+        <div class="ic">✓</div>
+        <h3>תודה! הפרטים נשלחו בהצלחה</h3>
+        <p style="color:var(--text-dim); margin-top:8px;">נחזור אליך בהקדם האפשרי.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">STRIKE <span>ACADEMY</span></div>
+        <p>ליווי אישי וממוקד למסחר באופציות. תוכנית מסחר מותאמת אישית, ניהול סיכונים וליווי שוטף עד למסחר עצמאי ובטוח.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>ניווט</h4>
+          <a href="#program">התוכנית</a>
+          <a href="#process">איך זה עובד</a>
+          <a href="#testimonials">המלצות</a>
+          <a href="#faq">שאלות נפוצות</a>
+        </div>
+        <div class="footer-col">
+          <h4>יצירת קשר</h4>
+          <a href="mailto:stikeacademy@gmail.com">stikeacademy@gmail.com</a>
+          <span>[מספר טלפון / וואטסאפ]</span>
+          <span>[קישור לאינסטגרם / פייסבוק]</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="disclaimer">
+      אין לראות באמור באתר זה ייעוץ השקעות, שיווק השקעות או המלצה לביצוע עסקאות מכל סוג שהוא.
+      מסחר באופציות ובניירות ערך כרוך בסיכון להפסד כספי, לרבות הפסד מלוא הסכום המושקע, ואינו מתאים לכל אדם.
+      האמור מבוסס על ניסיון וידע אישי בלבד ואינו תחליף לייעוץ מקצועי מותאם אישית מבעל רישיון כדין.
+      [יש להתאים סעיף זה בהתייעצות עם עורך דין/יועץ רגולטורי בהתאם לאופי השירות המוצע.]
+    </p>
+
+    <div class="copyright">
+      <span>© [שנה] Strike Academy. כל הזכויות שמורות.</span>
+      <span>נבנה עבור ליווי אישי במסחר באופציות</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // FAQ accordion
+  document.querySelectorAll('.faq-item').forEach(function(item){
+    item.querySelector('.faq-q').addEventListener('click', function(){
+      var wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(function(i){ i.classList.remove('open'); });
+      if(!wasOpen){ item.classList.add('open'); }
+    });
+  });
+
+  // Mobile nav
+  var style = document.createElement('style');
+  style.textContent = '@media (max-width:900px){.nav-links.mobile-open{display:flex; flex-direction:column; position:absolute; top:100%; inset-inline:0; background:var(--bg-alt); padding:20px 24px; border-bottom:1px solid var(--card-border); gap:18px;}}';
+  document.head.appendChild(style);
+
+  // Form submit -> show success state (FormSubmit performs the actual redirect/post in background via fetch)
+  var form = document.getElementById('leadForm');
+  var successBox = document.getElementById('formSuccess');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var data = new FormData(form);
+    fetch(form.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    }).then(function(){
+      form.style.display = 'none';
+      successBox.classList.add('show');
+    }).catch(function(){
+      // Fallback: let the browser submit normally if fetch fails (e.g. network/CORS)
+      form.removeEventListener('submit', arguments.callee);
+      form.submit();
+    });
+  });
+</script>
+
+</body>
+</html>
