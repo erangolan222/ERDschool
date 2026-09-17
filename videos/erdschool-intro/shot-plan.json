@@ -1,0 +1,60 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 10,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "dark technical/database product intro — deep navy background, cyan/teal accent, monospace-inflected grid motif, confident and precise",
+  "palette": ["#050a14", "#0d1526", "#3ddad7", "#f4f4f5", "#5865f2"],
+  "font": "Inter",
+  "beats": [0.6, 3.6, 6.4, 8.2],
+  "export": "mp4",
+  "asset_needs": [],
+  "block": "caption-kinetic-slam",
+  "customize": {
+    "notes": "caption-kinetic-slam drives the hook scene (ERDSCHOOL slam-in). Remaining scenes hand-authored per kinetic-type module (word_reveal, wave, scale_pulse) with a lightweight animated table/grid motif behind scene 2."
+  },
+  "content": {
+    "scenes": [
+      {
+        "id": "hook",
+        "start": 0,
+        "end": 2.6,
+        "text": "ERDSCHOOL",
+        "emphasis_words": ["ERDSCHOOL"],
+        "emotion": "confident, punchy",
+        "motion": "slam-in with alternating entrance directions, 3-frame deterministic shake on land",
+        "beats": [0.6]
+      },
+      {
+        "id": "build",
+        "start": 2.6,
+        "end": 5.6,
+        "text": "Design your database schema",
+        "emphasis_words": ["database", "schema"],
+        "emotion": "explanatory, building",
+        "motion": "word_reveal left-to-right over a faint animated table-grid backdrop (rows/columns draw in)",
+        "beats": [3.6]
+      },
+      {
+        "id": "punch",
+        "start": 5.6,
+        "end": 7.8,
+        "text": "Tables. Relationships. Clarity.",
+        "emphasis_words": ["Relationships", "Clarity"],
+        "emotion": "staccato, energetic",
+        "motion": "each phrase slams in on its own beat, scale_pulse + glow on emphasis words",
+        "beats": [6.4]
+      },
+      {
+        "id": "resolve",
+        "start": 7.8,
+        "end": 10,
+        "text": "ERDschool — model it right.",
+        "emphasis_words": ["ERDschool"],
+        "emotion": "settled, confident close",
+        "motion": "logo-style lockup scale + fade hold, subtle drift, final title-safe hold",
+        "beats": [8.2]
+      }
+    ]
+  }
+}

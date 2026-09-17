@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Inter";
+        src: url("vendor/fonts/inter-variable.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: normal;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Anton";
+        src: url("vendor/fonts/anton-400.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+        font-display: block;
+      }
+      :root {
+        --bg-1: #050a14;
+        --bg-2: #0d1526;
+        --accent: #3ddad7;
+        --accent-2: #5865f2;
+        --fg: #f4f4f5;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--bg-1);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+        background: radial-gradient(120% 120% at 50% 50%, var(--bg-2) 0%, var(--bg-1) 70%);
+      }
+
+      /* decorative ERD table-grid backdrop */
+      #grid-backdrop {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        opacity: 0.16;
+        background-image: linear-gradient(var(--accent) 1px, transparent 1px),
+          linear-gradient(90deg, var(--accent) 1px, transparent 1px);
+        background-size: 96px 96px;
+        pointer-events: none;
+      }
+      #scan-line {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 4px;
+        z-index: 2;
+        background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        box-shadow: 0 0 24px 2px var(--accent);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      #kt-stage {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 120px 160px;
+      }
+      .kt-word {
+        font-family: "Anton", sans-serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        color: var(--fg);
+        position: absolute;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        top: 50%;
+        letter-spacing: 0.04em;
+        line-height: 1;
+        opacity: 0;
+        visibility: hidden;
+      }
+      .kt-word.kw {
+        color: var(--accent);
+      }
+      .kt-tag {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        top: 68%;
+        font-family: Inter, sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: var(--fg);
+        opacity: 0;
+        visibility: hidden;
+        font-size: 42px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      class="clip"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="10"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="grid-backdrop"></div>
+      <div id="scan-line"></div>
+      <div id="kt-stage">
+        <div id="kt-container"></div>
+        <div id="kt-tag-container"></div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var _fitCanvas = document.createElement("canvas");
+        var _fitCtx = _fitCanvas.getContext("2d");
+        function fitFontSize(text, baseFontSize, fontWeight, fontFamily, maxWidth) {
+          var size = baseFontSize;
+          var minSize = Math.floor(baseFontSize * 0.35);
+          while (size > minSize) {
+            _fitCtx.font = fontWeight + " " + size + "px " + fontFamily;
+            if (_fitCtx.measureText(text).width <= maxWidth) return size;
+            size -= 2;
+          }
+          return minSize;
+        }
+
+        // Hook -> Build -> Punch -> Resolve, per shot-plan.json
+        var WORDS = [
+          { text: "ERDSCHOOL", start: 0.0, end: 2.3, size: 230, kw: true },
+
+          { text: "Design", start: 2.6, end: 2.95, size: 130 },
+          { text: "your", start: 3.0, end: 3.2, size: 130 },
+          { text: "database", start: 3.25, end: 3.85, size: 130, kw: true },
+          { text: "schema", start: 3.95, end: 4.5, size: 130, kw: true },
+          { text: "in", start: 4.6, end: 4.75, size: 130 },
+          { text: "minutes.", start: 4.78, end: 5.45, size: 130 },
+
+          { text: "Tables.", start: 5.6, end: 6.1, size: 170, kw: true },
+          { text: "Relationships.", start: 6.18, end: 6.95, size: 150, kw: true },
+          { text: "Clarity.", start: 7.02, end: 7.7, size: 170, kw: true },
+
+          { text: "ERDSCHOOL", start: 7.8, end: 9.9, size: 190, kw: true },
+        ];
+
+        var container = document.getElementById("kt-container");
+        var tl = gsap.timeline({ paused: true });
+
+        WORDS.forEach(function (w, wi) {
+          var el = document.createElement("div");
+          el.className = "kt-word" + (w.kw ? " kw" : "");
+          el.id = "kt-w-" + wi;
+          el.textContent = w.text.toUpperCase();
+          el.style.fontSize = fitFontSize(w.text.toUpperCase(), w.size, "400", "'Anton', sans-serif", 1720) + "px";
+          container.appendChild(el);
+
+          gsap.set(el, { yPercent: -50 });
+
+          var entranceMode = wi % 4;
+          tl.set(el, { visibility: "visible" }, w.start);
+          if (entranceMode === 0) {
+            tl.fromTo(
+              el,
+              { y: -120, opacity: 0, scale: 0.94 },
+              { y: 0, opacity: 1, scale: 1, duration: 0.22, ease: "back.out(1.7)" },
+              w.start,
+            );
+          } else if (entranceMode === 1) {
+            tl.fromTo(el, { x: -280, opacity: 0 }, { x: 0, opacity: 1, duration: 0.2, ease: "expo.out" }, w.start);
+          } else if (entranceMode === 2) {
+            tl.fromTo(el, { x: 280, opacity: 0 }, { x: 0, opacity: 1, duration: 0.2, ease: "expo.out" }, w.start);
+          } else {
+            tl.fromTo(
+              el,
+              { scale: 0.4, opacity: 0 },
+              { scale: 1, opacity: 1, duration: 0.24, ease: "back.out(2.2)" },
+              w.start,
+            );
+          }
+
+          // punch-scene keyword emphasis: extra glow/scale pulse on the beat
+          if (w.kw && w.start >= 5.6 && w.start < 7.8) {
+            tl.to(
+              el,
+              { textShadow: "0 0 36px var(--accent)", scale: 1.05, duration: 0.18, ease: "sine.inOut" },
+              w.start + 0.1,
+            );
+            tl.to(el, { textShadow: "0 0 0px var(--accent)", scale: 1, duration: 0.22, ease: "sine.inOut" }, w.start + 0.32);
+          }
+
+          tl.to(el, { opacity: 0, duration: 0.08, ease: "power2.in" }, w.end);
+          tl.set(el, { opacity: 0, visibility: "hidden" }, w.end + 0.08);
+        });
+
+        // resolve-scene tagline under the second ERDSCHOOL lockup
+        var tag = document.createElement("div");
+        tag.className = "kt-tag";
+        tag.id = "kt-tag";
+        tag.textContent = "Model it right.";
+        document.getElementById("kt-tag-container").appendChild(tag);
+        tl.set(tag, { visibility: "visible" }, 8.3);
+        tl.fromTo(tag, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.35, ease: "power2.out" }, 8.3);
+        tl.to(tag, { autoAlpha: 0, duration: 0.15, ease: "power1.in" }, 9.85);
+
+        // build-scene decorative scan line sweeping the table-grid backdrop
+        var scanLine = document.getElementById("scan-line");
+        var scanTravel = 1080 * 0.8; // top:10% -> top:90% of the 1080px stage, as a transform
+        gsap.set(scanLine, { y: 1080 * 0.1 });
+        tl.fromTo(scanLine, { autoAlpha: 0 }, { autoAlpha: 0.9, duration: 0.2 }, 2.65);
+        tl.to(scanLine, { y: "+=" + scanTravel, duration: 2.6, ease: "sine.inOut" }, 2.85);
+        tl.to(scanLine, { autoAlpha: 0, duration: 0.25 }, 5.2);
+
+        tl.seek(0);
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+  </body>
+</html>
